@@ -5,7 +5,7 @@ provider:
   runtime: nodejs18.x
   region: us-east-1
   environment:
-    RECORDS_TABLE: ${self:service}-records
+    RECORDS_TABLE: record-management-system-records
 
 plugins:
   - serverless-offline
@@ -20,7 +20,7 @@ custom:
 functions:
   createRecord:
     handler: handler.createRecord
-    records:
+    events:
       - http:
           path: /records
           method: post
@@ -28,15 +28,15 @@ functions:
 
   getRecords:
     handler: handler.getRecords
-    records:
+    events:
       - http:
           path: /records
           method: get
           cors: true
 
   getRecord:
-    handler: handler.getRecord
-    records:
+    handler: handler.getRecordById
+    events:
       - http:
           path: /records/{id}
           method: get
@@ -44,7 +44,7 @@ functions:
 
   updateRecord:
     handler: handler.updateRecord
-    records:
+    events:
       - http:
           path: /records/{id}
           method: put
@@ -52,7 +52,7 @@ functions:
 
   deleteRecord:
     handler: handler.deleteRecord
-    records:
+    events:
       - http:
           path: /records/{id}
           method: delete

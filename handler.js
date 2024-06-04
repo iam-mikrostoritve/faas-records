@@ -8,7 +8,7 @@ const docClient = new AWS.DynamoDB.DocumentClient({
   region: "us-east-1",
 });
 
-const TABLE_NAME = process.env.EVENTS_TABLE;
+const TABLE_NAME = 'record-management-system-records';
 
 // Create Record
 module.exports.createRecord = async (record) => {
