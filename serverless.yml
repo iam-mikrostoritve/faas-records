@@ -1,0 +1,81 @@
+service: record-management-system
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    RECORDS_TABLE: ${self:service}-records
+
+plugins:
+  - serverless-offline
+  - serverless-localstack
+
+custom:
+  localstack:
+    stages:
+      - local
+
+
+functions:
+  createRecord:
+    handler: handler.createRecord
+    records:
+      - http:
+          path: /records
+          method: post
+          cors: true
+
+  getRecords:
+    handler: handler.getRecords
+    records:
+      - http:
+          path: /records
+          method: get
+          cors: true
+
+  getRecord:
+    handler: handler.getRecord
+    records:
+      - http:
+          path: /records/{id}
+          method: get
+          cors: true
+
+  updateRecord:
+    handler: handler.updateRecord
+    records:
+      - http:
+          path: /records/{id}
+          method: put
+          cors: true
+
+  deleteRecord:
+    handler: handler.deleteRecord
+    records:
+      - http:
+          path: /records/{id}
+          method: delete
+          cors: true
+
+resources:
+  Resources:
+    RecordsDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.RECORDS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+
+
+
+
+  
